@@ -55,8 +55,8 @@ root.geometry('{}x{}'.format(screen_width, screen_height)) # makes object the si
 # fonts for variables
 font_time = tkinter.font.Font(family='Helvetica', size=x_large_text_size)
 font_date = tkinter.font.Font(family='Helvetica', size=medium_text_size)
-font_weather = tkinter.font.Font(family='Helvetica', size=small_text_size)
-font_news = tkinter.font.Font(family='Helvetica', size=medium_text_size)
+font_weather = tkinter.font.Font(family='Helvetica', size=medium_text_size)
+font_news = tkinter.font.Font(family='Helvetica', size=small_text_size)
 
 # formatting for date a time variables
 time_format = '%I:%M'
@@ -139,21 +139,38 @@ label_news = Label(frame_b_right, font=font_news,
                    bg='black',
                    fg='white')
 
-
-def get_news():
+# Creates a list of news headlines from news API
+def get_news_headlines():
 	news_key = os.environ.get('NEWS_API_KEY')
 	url = 'http://newsapi.org/v2/top-headlines?country=us'
 	params = {'apikey': news_key, 'q': 'cnn'}
 	response = requests.get(url, params = params)
-	response_json = response.json()
-	headlines = ''
+	response_json = response.json() # Convert API output to python dict
+	global headlines
+	headlines = []
 	for i in response_json['articles']:
-		headlines = headlines + i['title'] + '\n'
-		# time.sleep(5)
+		headlines.append(i['title'])
+	# print(headlines)
+	return headlines
 
-	label_news['text'] = headlines
 
 
+
+
+def get_headline():
+	global headlines
+	label_news['text'] = headlines[0]
+	headlines.pop(0)
+	if len(headlines) == 0:
+		headlines = get_news_headlines()
+	label_news.after(5000,get_headline)
+	
+
+
+
+
+
+# Creates function that iterates through list of headlines
 label_news.pack(side=RIGHT, anchor=SE)
 
 
@@ -168,7 +185,8 @@ label_news.pack(side=RIGHT, anchor=SE)
 # Call functions that were created
 tick()
 get_weather('Minneapolis')
-get_news()
+get_news_headlines()
+get_headline()
 
 
 #-------------------------------------------------------------------------------------
@@ -184,6 +202,7 @@ frame_top.pack(expand=TRUE, fill=BOTH, side=TOP)
 
 frame_b_right.pack(side=RIGHT, anchor=SE, padx=40, pady=40)
 frame_bottom.pack(expand=TRUE, fill=BOTH, side=BOTTOM)
+
 
 
 root.mainloop() # end of tkinter
