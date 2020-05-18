@@ -4,5 +4,6 @@ Mirror.py
 .DS_Store
 client_secret.json
 user1_token.pkl
+user2_token.pkl
 calendar_auth.py
 __pycache__

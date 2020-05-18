@@ -3,6 +3,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 import os
 import datetime
 import pickle
+import time
+import pandas
 
 # What scopes the application will access
 scopes = ['https://www.googleapis.com/auth/calendar.events.readonly']
@@ -36,12 +38,11 @@ def get_events():
 	if not events:
 		things = "No upcoming events found."
 	for event in events:
-		start = event['start'].get('dateTime', event['start'].get('date'))
-		things.update({start: event['summary']})
+		start = pandas.to_datetime(event['start'].get('dateTime'))
+		start_datetime = str(start.strftime('%m/%d/%Y')) + ' ' + str(start.strftime('%H:%M'))
+		things.update({start_datetime: event['summary']})
+	print(things)
 	return things
-
-
-
-# print(start, event['summary'])
+	
 
 get_events()

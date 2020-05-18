@@ -110,15 +110,15 @@ label_news = Label(frame_b_right, font=font_news,
 label_news.pack(side=RIGHT, anchor=SE)
 
 global headlines
-headlines = news.get_news_headlines()
+headlines =  news.get_news_headlines()
 
-# def get_headline():
-#   global headlines
-#   label_news['text'] = headlines[0]
-#   headlines.pop(0)
-#   if len(headlines) == 0:
-#     headlines = get_news_headlines()
-#   label_news.after(5000,get_headline)
+def get_headline():
+  global headlines
+  label_news['text'] = headlines[0]
+  headlines.pop(0)
+  if len(headlines) == 0:
+    headlines = news.get_news_headlines()
+  label_news.after(10000,get_headline)
 
 #-------------------------------------------------------------------------------------
 
@@ -135,7 +135,7 @@ label_calendar['text'] = str(mirror_calendar.get_events())
 # Call functions that were created
 date_time_check()
 weather_update()
-# get_headline()
+get_headline()
 
 
 #-------------------------------------------------------------------------------------
