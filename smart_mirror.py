@@ -35,6 +35,7 @@ root = Tk()
 root.title('Smart Mirror')
 root.configure(background='black') # creating the object and making it black
 
+
 # Creating the dimessions of the screen
 screen_width = root.winfo_screenwidth() 
 screen_height = root.winfo_screenheight()
@@ -104,7 +105,8 @@ frame_b_right = Frame(frame_bottom, background='black')
 # frame_news = Frame(frame_b_right, background='black')
 label_news = Label(frame_b_right, font=font_news,
                    bg='black',
-                   fg='white')
+                   fg='white',
+                   wraplength = 500)
 
 # Creates function that iterates through list of headlines
 label_news.pack(side=RIGHT, anchor=SE)
@@ -124,7 +126,7 @@ def get_headline():
 
 # BOTTOM LEFT FRAME FOR CALENDAR
 frame_b_left = Frame(frame_bottom, background = 'black')
-label_calendar = Label(frame_b_left, font = font_calendar, bg = 'black', fg = 'white')
+label_calendar = Label(frame_b_left, font = font_calendar, bg = 'black', fg = 'white', wraplength = 800)
 label_calendar.pack(side = LEFT, anchor = SW)
 label_calendar['text'] = str(mirror_calendar.get_events())
 
@@ -144,8 +146,8 @@ get_headline()
 frame_t_left.pack(side=LEFT, anchor=N, padx=40, pady=40)
 frame_t_right.pack(side=RIGHT, anchor=N, padx=40, pady=40)
 frame_top.pack(expand=TRUE, fill=BOTH, side=TOP)
-frame_b_left.pack(side = LEFT, anchor = SW, padx=40, pady=40)
-frame_b_right.pack(side=RIGHT, anchor=SE, padx=40, pady=40)
+frame_b_left.pack(side = LEFT, anchor = W, padx=40, pady=100)
+frame_b_right.pack(side=RIGHT, anchor=SE, padx=100, pady=40)
 frame_bottom.pack(expand=TRUE, fill=BOTH, side=BOTTOM)
 
 
