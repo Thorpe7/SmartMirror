@@ -85,7 +85,8 @@ label_clock.pack(side=TOP, anchor=W)
 frame_t_right = Frame(frame_top, background='black')
 label_weather = Label(frame_t_right, font=font_weather,
                    bg='black',
-                   fg='white')
+                   fg='white',
+                   wraplength = 500)
 
 label_weather['text'] = weather.get_weather('Minneapolis')
 label_weather.pack(side=TOP, anchor=E)
@@ -94,7 +95,7 @@ label_weather.pack(side=TOP, anchor=E)
 def weather_update():
   if weather.get_weather('Minneapolis') != label_weather['text']:
     label_weather['text'] = weather.get_weather('Minneapolis')
-    label_weather.after(3600000, weather_update)
+    label_weather.after(3600000, weather_update) # updates every 30 minutes
 
 
 # --------------------------------------------------------------------------------------
@@ -106,7 +107,7 @@ frame_b_right = Frame(frame_bottom, background='black')
 label_news = Label(frame_b_right, font=font_news,
                    bg='black',
                    fg='white',
-                   wraplength = 500)
+                   wraplength = 500) # 800 too wide on horizontal screen, correct once it is on the pi
 
 # Creates function that iterates through list of headlines
 label_news.pack(side=RIGHT, anchor=SE)
@@ -120,7 +121,7 @@ def get_headline():
   headlines.pop(0)
   if len(headlines) == 0:
     headlines = news.get_news_headlines()
-  label_news.after(10000,get_headline)
+  label_news.after(480000,get_headline) # News headline updates every 8 minutes
 
 #-------------------------------------------------------------------------------------
 
@@ -128,7 +129,7 @@ def get_headline():
 frame_b_left = Frame(frame_bottom, background = 'black')
 label_calendar = Label(frame_b_left, font = font_calendar, bg = 'black', fg = 'white', wraplength = 800)
 label_calendar.pack(side = LEFT, anchor = SW)
-label_calendar['text'] = str(mirror_calendar.get_events())
+label_calendar['text'] = str(mirror_calendar.get_events()) # Calendar needs update condition
 
 
 
