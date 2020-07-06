@@ -20,6 +20,9 @@ import sys
 from dotenv import load_dotenv
 load_dotenv()
 
+# Specifying the local Display to be used
+os.environ["DISPLAY"] = ':0'
+
 #specifying dimmensions for variable
 
 # text sizes
@@ -40,12 +43,17 @@ root.configure(background='black') # creating the object and making it black
 screen_width = root.winfo_screenwidth() 
 screen_height = root.winfo_screenheight()
 root.geometry('{}x{}'.format(screen_width, screen_height)) # makes object the size of the screen 
+root.overrideredirect(True)
+root.overrideredirect(False)
+root.attributes('-fullscreen',True)
+
+
 
 # fonts for variables
 font_time = tkinter.font.Font(family='Helvetica', size=x_large_text_size)
 font_date = tkinter.font.Font(family='Helvetica', size=medium_text_size)
 font_weather = tkinter.font.Font(family='Helvetica', size=medium_text_size)
-font_news = tkinter.font.Font(family='Helvetica', size=small_text_size)
+font_news = tkinter.font.Font(family='Helvetica', size=medium_text_size)
 font_calendar = tkinter.font.Font(family = 'Helvetica', size = medium_text_size)
 
 #------------------------------------------------------------------------------------
@@ -88,7 +96,7 @@ label_weather = Label(frame_t_right, font=font_weather,
                    fg='white')
 
 label_weather['text'] = weather.get_weather('Minneapolis')
-label_weather.pack(side=TOP, anchor=E)
+label_weather.pack(side=TOP, anchor=W)
 
 
 def weather_update():
@@ -100,38 +108,36 @@ def weather_update():
 # --------------------------------------------------------------------------------------
 
 # BOTTOM RIGHT FRAME FOR NEWS HEADLINES
-
-frame_b_right = Frame(frame_bottom, background='black') 
-# frame_news = Frame(frame_b_right, background='black')
-label_news = Label(frame_b_right, font=font_news,
+frame_b_left = Frame(frame_bottom, background = 'black')
+frame_b_right = Frame(frame_bottom, background='black')
+label_news = Label(frame_b_left, font=font_news,
                    bg='black',
                    fg='white',
-                   wraplength = 500)
+                   wraplength = 800)
+
 
 # Creates function that iterates through list of headlines
-label_news.pack(side=RIGHT, anchor=SE)
+label_news.pack(side = BOTTOM, anchor = SW)
 
 global headlines
-headlines =  news.get_news_headlines()
-
+headlines =  news.get_news_headlines() # New function that requests news headlines twice a day
+global n
+n = 0
 def get_headline():
-  global headlines
-  label_news['text'] = headlines[0]
-  headlines.pop(0)
-  if len(headlines) == 0:
-    headlines = news.get_news_headlines()
-  label_news.after(10000,get_headline)
+	global headlines
+	global n
+	label_news['text'] = headlines[n]
+	n+=1
+	if n > len(headlines)-1:
+		n = 0
+	label_news.after(15000,get_headline)
 
 #-------------------------------------------------------------------------------------
 
 # BOTTOM LEFT FRAME FOR CALENDAR
-frame_b_left = Frame(frame_bottom, background = 'black')
 label_calendar = Label(frame_b_left, font = font_calendar, bg = 'black', fg = 'white', wraplength = 800)
-label_calendar.pack(side = LEFT, anchor = SW)
-label_calendar['text'] = str(mirror_calendar.get_events())
-
-
-
+label_calendar.pack(side = TOP, anchor = W)
+label_calendar['text'] = str(mirror_calendar.dict_to_str(mirror_calendar.get_events()))
 
 #--------------------------------------------------------------------------------------
 # Call functions that were created
@@ -139,15 +145,14 @@ date_time_check()
 weather_update()
 get_headline()
 
-
 #-------------------------------------------------------------------------------------
 # Packing to display the objects that have been created
 
 frame_t_left.pack(side=LEFT, anchor=N, padx=40, pady=40)
-frame_t_right.pack(side=RIGHT, anchor=N, padx=40, pady=40)
+frame_t_right.pack(side=RIGHT, anchor=NE, padx=40, pady=40)
 frame_top.pack(expand=TRUE, fill=BOTH, side=TOP)
-frame_b_left.pack(side = LEFT, anchor = W, padx=40, pady=100)
-frame_b_right.pack(side=RIGHT, anchor=SE, padx=100, pady=40)
+frame_b_left.pack(side = LEFT, anchor=SW,  padx = 40, pady = 40)
+frame_b_right.pack(side = LEFT, anchor = SW, padx=40, pady=40)
 frame_bottom.pack(expand=TRUE, fill=BOTH, side=BOTTOM)
 
 

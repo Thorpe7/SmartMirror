@@ -18,7 +18,7 @@ def get_news_headlines():
 	headlines = []
 	for i in response_json['articles']:
 		headlines.append(i['title'])
-	# print(headlines)
+	#print(headlines)
 
 	return headlines
 
@@ -28,7 +28,7 @@ def format_headlines(headlines):
 	headlines = headlines
 	for i in headlines:
 		x = int(len(i)/2)
-		
+
 	# print(headlines)
 
 get_news_headlines()

@@ -30,7 +30,14 @@ service = build('calendar', 'v3', credentials = user1_credentials)
 now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 result = service.events().list(calendarId='primary', timeMin=now,maxResults=10, singleEvents=True,orderBy='startTime').execute()
 
-
+def dict_to_str(dict):
+	if type(dict) == str:
+		return dict
+	if type(dict) != str:
+		end_str = ""
+		for key, value in dict.items():
+			end_str = end_str + ' ' + str(key) + ': ' + str(value) + '\n'
+		return end_str
 
 def get_events():
 	events = result.get('items', [])
@@ -39,10 +46,13 @@ def get_events():
 		things = "No upcoming events found."
 	for event in events:
 		start = pandas.to_datetime(event['start'].get('dateTime'))
-		start_datetime = str(start.strftime('%m/%d/%Y')) + ' ' + str(start.strftime('%H:%M'))
-		things.update({start_datetime: event['summary']})
-	print(things)
+		if start == None:
+			things.update({event['summary']: 'All Day Event'})
+		else:
+			start_datetime = str(start.strftime('%m/%d/%Y')) + ' ' + str(start.strftime('%H:%M'))
+			things.update({event['summary']: start_datetime})
+	#print(things)
 	return things
-	
 
-get_events()
+dict = get_events()
+dict_to_str(dict)
