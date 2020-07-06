@@ -2,6 +2,7 @@ import os
 import requests
 
 
+
 # formats the weather output
 def format_response(weather):
     try:
@@ -9,7 +10,7 @@ def format_response(weather):
         desc = weather['weather'][0]['description']
         temp = weather['main']['temp']
 
-        final_str = 'City: %s \nConditions: %s \nTemperature: %s' % (name, desc, temp)
+        final_str = str(desc + ' ' + temp)
     except:
         final_str = 'City not found you dipass'
 
