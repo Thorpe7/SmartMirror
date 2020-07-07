@@ -15,6 +15,8 @@ import traceback
 from tkinter import *
 import requests
 import sys
+from io import BytesIO
+from PIL import ImageTk, Image
 
 # Grab environmental variables
 from dotenv import load_dotenv
@@ -52,9 +54,10 @@ root.attributes('-fullscreen',True)
 # fonts for variables
 font_time = tkinter.font.Font(family='Helvetica', size=x_large_text_size)
 font_date = tkinter.font.Font(family='Helvetica', size=medium_text_size)
-font_weather = tkinter.font.Font(family='Helvetica', size=medium_text_size)
+font_conditions = tkinter.font.Font(family='Helvetica', size=medium_text_size)
 font_news = tkinter.font.Font(family='Helvetica', size=medium_text_size)
 font_calendar = tkinter.font.Font(family = 'Helvetica', size = medium_text_size)
+font_weather = tkinter.font.Font(family = 'Helvetica', size = large_text_size)
 
 #------------------------------------------------------------------------------------
 # Frames for placing labels into
@@ -83,9 +86,8 @@ def date_time_check():
   label_date.after(3600000, date_time_check)
 
 # Layout of date and time
-label_date.pack(side=TOP, anchor=W)
 label_clock.pack(side=TOP, anchor=W)
-
+label_date.pack(side=TOP, anchor=W)
 
 #--------------------------------------------------------------------------------------
 # TOP RIGHT FRAME FOR WEATHER 
@@ -94,10 +96,15 @@ frame_t_right = Frame(frame_top, background='black')
 label_weather = Label(frame_t_right, font=font_weather,
                    bg='black',
                    fg='white')
-
+label_weather_conditions = Label(frame_t_right, font=font_conditions, bg = 'black', fg='white')
 label_weather['text'] = weather.get_weather('Minneapolis')
-label_weather.pack(side=TOP, anchor=W)
-
+label_weather_conditions['text'] = weather.get_weather_conditions('Minneapolis')
+label_weather.pack(side=TOP, anchor=E)
+label_weather_conditions.pack(side=TOP, anchor=W)
+# Code commented out below is for adding icons from weather api, but they don't look good
+#img = ImageTk.PhotoImage(Image.open(BytesIO(weather.get_icon())))
+#label_weather_icon = Label(image=img)
+#label_weather_icon.pack(side=TOP, anchor=W)
 
 def weather_update():
   if weather.get_weather('Minneapolis') != label_weather['text']:
@@ -119,8 +126,12 @@ label_news = Label(frame_b_left, font=font_news,
 # Creates function that iterates through list of headlines
 label_news.pack(side = BOTTOM, anchor = SW)
 
-global headlines
-headlines =  news.get_news_headlines() # New function that requests news headlines twice a day
+def change_headlines():
+	global headlines
+	headlines = news.get_news_headlines()
+	label_news.after(21600000, change_headlines)
+
+change_headlines()
 global n
 n = 0
 def get_headline():
@@ -137,13 +148,16 @@ def get_headline():
 # BOTTOM LEFT FRAME FOR CALENDAR
 label_calendar = Label(frame_b_left, font = font_calendar, bg = 'black', fg = 'white', wraplength = 800)
 label_calendar.pack(side = TOP, anchor = W)
-label_calendar['text'] = str(mirror_calendar.dict_to_str(mirror_calendar.get_events()))
+def calendar_text():
+	label_calendar['text'] = str(mirror_calendar.dict_to_str(mirror_calendar.get_events()))
+	label_calendar.after(21600000,calendar_text)
 
 #--------------------------------------------------------------------------------------
 # Call functions that were created
 date_time_check()
 weather_update()
 get_headline()
+calendar_text()
 
 #-------------------------------------------------------------------------------------
 # Packing to display the objects that have been created

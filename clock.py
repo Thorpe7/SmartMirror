@@ -1,7 +1,7 @@
 import time
 
 # formatting for date a time variables
-time_format = '%I:%M'
+time_format = '%-I:%M%p'
 date_format = '%A, %B %d, %Y'
 
 # Pulls time
