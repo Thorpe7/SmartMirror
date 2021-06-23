@@ -1,8 +1,8 @@
 # Function Files
 import clock
 import weather
-import news
-import mirror_calendar
+#import news
+#import mirror_calendar
 import time
 
 # Everything needed for tkinter
@@ -20,8 +20,8 @@ from PIL import ImageTk, Image
 import imp
 
 # Grab environmental variables
-from dotenv import load_dotenv
-load_dotenv()
+from dotenv import Dotenv
+dotenv=Dotenv("/home/pi/SmartMirror/.env")
 
 # Specifying the local Display to be used
 os.environ["DISPLAY"] = ':0'
@@ -134,7 +134,7 @@ def completeSmartMirror():
     headlines = news.get_news_headlines()
     label_news.after(21600000, change_headlines)
 
-  change_headlines()
+#  change_headlines()
   global n
   n = 0
   def get_headline():
@@ -159,8 +159,8 @@ def completeSmartMirror():
   # Call functions that were created
   date_time_check()
   weather_update()
-  get_headline()
-  calendar_text()
+#  get_headline()
+#  calendar_text()
 
   #-------------------------------------------------------------------------------------
   # Packing to display the objects that have been created

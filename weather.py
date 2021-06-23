@@ -1,7 +1,7 @@
 import os
 import requests
-from dotenv import load_dotenv
-load_dotenv()
+from dotenv import Dotenv
+dotenv = ("/home/pi/SmartMirror/.env")
 import io
 import base64
 from urllib.request import urlopen

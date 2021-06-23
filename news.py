@@ -1,10 +1,8 @@
 import os
 import requests
 import json
-from dotenv import load_dotenv
-load_dotenv()
-
-
+from dotenv import Dotenv
+dotenv=Dotenv("/home/pi/SmartMirror/.env")
 
 # Creates a list of news headlines from news API
 def get_news_headlines():
